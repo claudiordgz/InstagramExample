@@ -1,0 +1,13 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+    </style>
+
+    //<!-- Hack for Robolectric to run with appcompat.v7 -->
+    <style name="RoboAppTheme" parent="@android:style/Theme.Holo.Light">
+        //<!-- Customize your theme here. -->
+    </style>
+
+</resources>
