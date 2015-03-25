@@ -13,8 +13,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.ViewAnimator;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,12 +29,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public static class ImageHolder extends RecyclerView.ViewHolder {
 
         public ImageView bigImage, firstSmallImage, secondSmallImage;
+        public ViewAnimator mViewAnimatorBigImage, mViewAnimatorFirstSmallImage, mViewAnimatorSecondSmallImage;
 
         public ImageHolder(View imageView) {
             super(imageView);
             bigImage = (ImageView) itemView.findViewById(R.id.bigImage);
             firstSmallImage = (ImageView) itemView.findViewById(R.id.firstSmallImage);
             secondSmallImage = (ImageView) itemView.findViewById(R.id.secondSmallImage);
+            mViewAnimatorBigImage = (ViewAnimator) itemView.findViewById(R.id.animatorBigImage);
+            mViewAnimatorFirstSmallImage = (ViewAnimator) itemView.findViewById(R.id.animatorFirstSmallImage);
+            mViewAnimatorSecondSmallImage = (ViewAnimator) itemView.findViewById(R.id.animatorSecondSmallImage);
         }
     }
     private ArrayList<ViewHolderModel> mData = new ArrayList<>();
@@ -79,16 +85,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.ImageHolder viewHolder, int position) {
-
         int[] sizes = {bigSize, smallSize, smallSize};
         ImageView[] models = { viewHolder.bigImage, viewHolder.firstSmallImage, viewHolder.secondSmallImage };
+        final ViewAnimator[] animators = {viewHolder.mViewAnimatorBigImage, viewHolder.mViewAnimatorFirstSmallImage,
+            viewHolder.mViewAnimatorSecondSmallImage};
         String[] imageUrls = {mData.get(position).getBigImage(), mData.get(position).getFirstSmallImage(), mData.get(position).getSecondSmallImage()};
         for(int i = 0; i != models.length; ++i) {
+            animators[i].setDisplayedChild(1);
+            final int index = i;
             Picasso.with(context)
                     .load(imageUrls[i])
                     .resize(sizes[i], sizes[i])
                     .centerCrop()
-                    .into(models[i]);
+                    .into(models[i], new Callback.EmptyCallback(){
+                        @Override public void onSuccess() {
+                            // Index 0 is the image view.
+                            animators[index].setDisplayedChild(0);
+                        }
+                    });
 
             models[i].setOnClickListener(this);
             models[i].setTag(imageUrls[i]);
@@ -117,9 +131,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     view.setAlpha(1);
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (isOnClick) {
-                        Log.d(TAG, "onClick ");
-                    }
                     view.setAlpha(1);
                     break;
                 case MotionEvent.ACTION_MOVE:
