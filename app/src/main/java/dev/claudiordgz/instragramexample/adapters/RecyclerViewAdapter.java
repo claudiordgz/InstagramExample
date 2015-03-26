@@ -1,19 +1,13 @@
-package dev.claudiordgz.instragramexample;
+package dev.claudiordgz.instragramexample.adapters;
 
 
-import android.content.ClipData;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.Pair;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.ViewAnimator;
 
 import com.squareup.picasso.Callback;
@@ -21,8 +15,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import dev.claudiordgz.instragramexample.R;
+import dev.claudiordgz.instragramexample.model.ViewHolderModel;
 import dev.claudiordgz.instragramexample.listeners.DragListener;
 import dev.claudiordgz.instragramexample.listeners.TouchListener;
+import dev.claudiordgz.instragramexample.util.OrientationHelper;
 
 /**
  * Created by Claudio on 3/25/2015.
@@ -31,17 +30,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public static class ImageHolder extends RecyclerView.ViewHolder {
 
-        public ImageView bigImage, firstSmallImage, secondSmallImage;
-        public ViewAnimator mViewAnimatorBigImage, mViewAnimatorFirstSmallImage, mViewAnimatorSecondSmallImage;
+        @InjectView(R.id.bigImage) ImageView bigImage;
+        @InjectView(R.id.firstSmallImage) ImageView firstSmallImage;
+        @InjectView(R.id.secondSmallImage) ImageView secondSmallImage;
+
+        @InjectView(R.id.animatorBigImage) ViewAnimator mViewAnimatorBigImage;
+        @InjectView(R.id.animatorFirstSmallImage) ViewAnimator mViewAnimatorFirstSmallImage;
+        @InjectView(R.id.animatorSecondSmallImage) ViewAnimator mViewAnimatorSecondSmallImage;
 
         public ImageHolder(View imageView) {
             super(imageView);
-            bigImage = (ImageView) itemView.findViewById(R.id.bigImage);
-            firstSmallImage = (ImageView) itemView.findViewById(R.id.firstSmallImage);
-            secondSmallImage = (ImageView) itemView.findViewById(R.id.secondSmallImage);
-            mViewAnimatorBigImage = (ViewAnimator) itemView.findViewById(R.id.animatorBigImage);
-            mViewAnimatorFirstSmallImage = (ViewAnimator) itemView.findViewById(R.id.animatorFirstSmallImage);
-            mViewAnimatorSecondSmallImage = (ViewAnimator) itemView.findViewById(R.id.animatorSecondSmallImage);
+            ButterKnife.inject(this, imageView);
         }
     }
     private ArrayList<ViewHolderModel> mData = new ArrayList<>();
@@ -56,11 +55,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Pair<Integer, Integer> sizes = OrientationHelper.getScreenOrientationAndHeight(ctx);
         bigSize = sizes.second/3;
         smallSize = (bigSize)/2;
-    }
-
-    public void updateList(ArrayList<ViewHolderModel> data) {
-        mData = data;
-        notifyDataSetChanged();
     }
 
     @Override
@@ -105,7 +99,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             animators[index].setDisplayedChild(0);
                         }
                     });
-
             models[i].setOnClickListener(this);
             models[i].setTag(imageUrls[i]);
             models[i].setOnTouchListener(new TouchListener());

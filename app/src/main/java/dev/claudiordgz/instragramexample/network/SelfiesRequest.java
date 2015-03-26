@@ -1,4 +1,4 @@
-package dev.claudiordgz.instragramexample;
+package dev.claudiordgz.instragramexample.network;
 
 import android.content.Context;
 import android.util.Log;
@@ -14,6 +14,8 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import dev.claudiordgz.instragramexample.R;
 
 
 /**

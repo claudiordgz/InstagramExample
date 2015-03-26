@@ -18,32 +18,48 @@ public class TouchListener implements View.OnTouchListener {
     public TouchListener() {}
 
     public boolean onTouch(View view, MotionEvent ev) {
-        final float SCROLL_THRESHOLD = 10;
         switch (ev.getAction() & MotionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
-                mDownX = ev.getX();
-                mDownY = ev.getY();
-                isOnClick = true;
-                break;
+                return ActionDown(ev);
             case MotionEvent.ACTION_CANCEL:
-                view.setAlpha(1);
-                break;
+                return ActionCancel(view);
             case MotionEvent.ACTION_UP:
-                view.setAlpha(1);
-                break;
+                return ActionUp(view);
             case MotionEvent.ACTION_MOVE:
-                if (isOnClick && (Math.abs(mDownX - ev.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - ev.getY()) > SCROLL_THRESHOLD)) {
-                    Log.d(TAG, "movement");
-                    isOnClick = false;
-                    ClipData data = ClipData.newPlainText("", "");
-                    View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                    view.startDrag(data, shadowBuilder, view, 0);
-                    view.setAlpha(.5f);
-                    return true;
-                }
-                break;
-            default: break;
+                return ActionMove(view, ev);
         }
         return false;
     }
+
+    private boolean ActionDown(MotionEvent ev){
+        mDownX = ev.getX();
+        mDownY = ev.getY();
+        isOnClick = true;
+        return false;
+    }
+
+    private boolean ActionCancel(View view){
+        view.setAlpha(1);
+        return false;
+    }
+
+    private boolean ActionUp(View view){
+        view.setAlpha(1);
+        return false;
+    }
+
+    private boolean ActionMove(View view, MotionEvent ev){
+        float SCROLL_THRESHOLD = 10;
+        if (isOnClick && (Math.abs(mDownX - ev.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - ev.getY()) > SCROLL_THRESHOLD)) {
+            Log.d(TAG, "movement");
+            isOnClick = false;
+            ClipData data = ClipData.newPlainText("", "");
+            View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
+            view.startDrag(data, shadowBuilder, view, 0);
+            view.setAlpha(.5f);
+            return true;
+        }
+        return false;
+    }
+
 }

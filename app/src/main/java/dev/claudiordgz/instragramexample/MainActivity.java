@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 
+import dev.claudiordgz.instragramexample.fragments.ImagesFragment;
+
 public class MainActivity extends ActionBarActivity {
 
     @Override

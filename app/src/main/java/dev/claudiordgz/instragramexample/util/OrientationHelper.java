@@ -1,4 +1,4 @@
-package dev.claudiordgz.instragramexample;
+package dev.claudiordgz.instragramexample.util;
 
 import android.content.Context;
 import android.content.res.Configuration;

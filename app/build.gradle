@@ -22,6 +22,9 @@ android {
         exclude 'META-INF/NOTICE'
         exclude 'LICENSE.txt'
     }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
 }
 
 configurations {
@@ -39,6 +42,7 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.4.2'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.2'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.2'
+    compile 'com.jakewharton:butterknife:6.1.0'
 }
 
 // TEST Environment Libraries

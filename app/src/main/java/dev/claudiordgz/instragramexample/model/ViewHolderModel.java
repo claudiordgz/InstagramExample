@@ -1,4 +1,4 @@
-package dev.claudiordgz.instragramexample;
+package dev.claudiordgz.instragramexample.model;
 
 /**
  * Created by Claudio on 3/25/2015.
@@ -9,7 +9,7 @@ public class ViewHolderModel {
     private String mFirstSmallImage;
     private String mSecondSmallImage;
 
-    ViewHolderModel(String big, String firstSmall, String secondSmall) {
+    public ViewHolderModel(String big, String firstSmall, String secondSmall) {
         mBigImage = big.replace("\"", "");
         mFirstSmallImage = firstSmall.replace("\"", "");
         mSecondSmallImage = secondSmall.replace("\"", "");

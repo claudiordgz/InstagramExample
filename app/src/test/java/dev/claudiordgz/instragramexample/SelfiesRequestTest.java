@@ -11,6 +11,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 import dev.claudiordgz.instragramexample.helpers.StyleChangerRobolectricTestRunner;
+import dev.claudiordgz.instragramexample.network.SelfiesRequest;
 
 /**
  * Created by Claudio on 3/25/2015.
