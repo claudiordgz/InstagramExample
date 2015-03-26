@@ -21,6 +21,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import dev.claudiordgz.instragramexample.listeners.DragListener;
+import dev.claudiordgz.instragramexample.listeners.TouchListener;
+
 /**
  * Created by Claudio on 3/25/2015.
  */
@@ -99,118 +102,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     .centerCrop()
                     .into(models[i], new Callback.EmptyCallback(){
                         @Override public void onSuccess() {
-                            // Index 0 is the image view.
                             animators[index].setDisplayedChild(0);
                         }
                     });
 
             models[i].setOnClickListener(this);
             models[i].setTag(imageUrls[i]);
-            models[i].setOnTouchListener(new MyTouchListener());
-            models[i].setOnDragListener(new MyDragListener());
-        }
-    }
-
-    private float mDownX;
-    private float mDownY;
-    private final float SCROLL_THRESHOLD = 10;
-    private boolean isOnClick;
-
-    // This defines your touch listener
-    private final class MyTouchListener implements View.OnTouchListener {
-        private String TAG = this.getClass().getName();
-        public boolean onTouch(View view, MotionEvent ev) {
-
-            switch (ev.getAction() & MotionEvent.ACTION_MASK) {
-                case MotionEvent.ACTION_DOWN:
-                    mDownX = ev.getX();
-                    mDownY = ev.getY();
-                    isOnClick = true;
-                    break;
-                case MotionEvent.ACTION_CANCEL:
-                    view.setAlpha(1);
-                    break;
-                case MotionEvent.ACTION_UP:
-                    view.setAlpha(1);
-                    break;
-                case MotionEvent.ACTION_MOVE:
-                    if (isOnClick && (Math.abs(mDownX - ev.getX()) > SCROLL_THRESHOLD || Math.abs(mDownY - ev.getY()) > SCROLL_THRESHOLD)) {
-                        Log.d(TAG, "movement");
-                        isOnClick = false;
-                        ClipData data = ClipData.newPlainText("", "");
-                        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
-                        view.startDrag(data, shadowBuilder, view, 0);
-                        view.setAlpha(.5f);
-                        return true;
-                    }
-                    break;
-                default: break;
-            }
-            return false;
-        }
-    }
-
-    class MyDragListener implements View.OnDragListener {
-
-        @Override
-        public boolean onDrag(View v, DragEvent event) {
-            switch (event.getAction()) {
-                case DragEvent.ACTION_DRAG_STARTED: break;
-                case DragEvent.ACTION_DRAG_ENTERED:
-                    v.setBackgroundColor(Color.GREEN);
-                    v.setPadding(2,2,2,2);
-                    break;
-                case DragEvent.ACTION_DRAG_EXITED:
-                    v.setBackgroundColor(Color.TRANSPARENT);
-                    v.setPadding(0,0,0,0);
-                    break;
-                case DragEvent.ACTION_DROP:
-                    v.setBackgroundColor(Color.TRANSPARENT);
-                    v.setPadding(0,0,0,0);
-                    View view = (View) event.getLocalState();
-                    ImageView container = (ImageView) v;
-                    String sourceUrl = view.getTag().toString();
-                    String containerUrl = container.getTag().toString();
-                    int sourceSize = view.getHeight();
-                    int containerSize = container.getHeight();
-                    //Swap Images
-                    if(containerSize > smallSize + 50) {
-                        Picasso.with(context)
-                                .load(sourceUrl)
-                                .resize(bigSize, bigSize)
-                                .centerCrop()
-                                .into(container);
-                    }
-                    else{
-                        Picasso.with(context)
-                                .load(sourceUrl)
-                                .resize(smallSize, smallSize)
-                                .centerCrop()
-                                .into(container);
-                    }
-
-                    if(sourceSize > smallSize + 50) {
-                        Picasso.with(context)
-                                .load(containerUrl)
-                                .resize(bigSize, bigSize)
-                                .centerCrop()
-                                .into((ImageView)view);
-                    }
-                    else{
-                        Picasso.with(context)
-                                .load(containerUrl)
-                                .resize(smallSize, smallSize)
-                                .centerCrop()
-                                .into((ImageView)view);
-                    }
-                    container.setTag(sourceUrl);
-                    view.setTag(containerUrl);
-                    break;
-                case DragEvent.ACTION_DRAG_ENDED:
-                default:
-                    break;
-            }
-            return true;
+            models[i].setOnTouchListener(new TouchListener());
+            models[i].setOnDragListener(new DragListener(context, bigSize, smallSize));
         }
     }
 
