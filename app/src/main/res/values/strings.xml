@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">InstragramExample</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="placeholder_image_str">Hello world!</string>
+    <string name="divider">divider</string>
     <string name="action_settings">Settings</string>
 
     <string name="CLIENTID">0b512a50c0054b11b9753dcb4f3fa181</string>

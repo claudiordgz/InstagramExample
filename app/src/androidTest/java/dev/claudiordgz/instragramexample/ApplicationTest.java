@@ -1,4 +1,4 @@
-package dev.claudiordgz.instragramexample;
+package dev.claudiordgz.hashtasearch;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
