@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="InatagramCardView">
+        <attr name="image_url" format="string" />
+        <attr name="username_profile_url" format="string"/>
+        <attr name="username" format="string" />
+        <attr name="likes" format="string" />
+        <attr name="card_width" format="dimension" />
+        <attr name="card_height" format="dimension" />
+    </declare-styleable>
+</resources>

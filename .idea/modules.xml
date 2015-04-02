@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AutoFitTextViewLibrary/AutoFitTextViewLibrary.iml" filepath="$PROJECT_DIR$/AutoFitTextViewLibrary/AutoFitTextViewLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/InstragramExample.iml" filepath="$PROJECT_DIR$/InstragramExample.iml" />
+      <module fileurl="file://$PROJECT_DIR$/adaptablecard/adaptablecard.iml" filepath="$PROJECT_DIR$/adaptablecard/adaptablecard.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/sliderlib/sliderlib.iml" filepath="$PROJECT_DIR$/sliderlib/sliderlib.iml" />
     </modules>
   </component>

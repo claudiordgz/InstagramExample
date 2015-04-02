@@ -1,5 +1,7 @@
 package dev.claudiordgz.hashtasearch.model;
 
+import dev.claudiordgz.common.model.InstagramData;
+
 /**
  * Created by Claudio on 3/25/2015.
  */

@@ -2,10 +2,9 @@ package dev.claudiordgz.hashtasearch.view_holders;
 
 import android.util.Pair;
 import android.view.View;
-import android.widget.ImageView;
 
+import dev.claudiordgz.adaptablecard.ItemCard;
 import dev.claudiordgz.android.sliderlib.common.OrientationHelper;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -24,31 +23,27 @@ import uk.co.ribot.easyadapter.annotations.LayoutId;
 public class TripletViewHolder extends ItemViewHolder<TripletImages> {
 
     @InjectViews({R.id.bigImage, R.id.firstSmallImage, R.id.secondSmallImage})
-    List<ImageView> mImageList;
+    List<ItemCard> mImageList;
 
-    private int bigSize;
-    private int smallSize;
+    private int bigSizeWidth;
+    private int bigSizeHeight;
+    private int smallSizeWidth;
+    private int smallSizeHeight;
 
     public TripletViewHolder(View view) {
         super(view);
         ButterKnife.inject(this, view);
         Pair<Integer, Integer> sizes = OrientationHelper.getScreenOrientationAndSize(getContext()).second;
-        bigSize = sizes.first/3;
-        smallSize = (bigSize)/2;
+        bigSizeWidth = sizes.first/3;
+        bigSizeHeight = ((sizes.first/3)/4)*5;
+        smallSizeWidth = (bigSizeWidth)/2;
+        smallSizeHeight = bigSizeHeight/2;
     }
 
     @Override
     public void onSetValues(TripletImages images, PositionInfo positionInfo) {
-        mImageList.get(0).setTag(images.getBigImage().imageUrl);
-        mImageList.get(1).setTag(images.getFirstSmallImage().imageUrl);
-        mImageList.get(2).setTag(images.getSecondSmallImage().imageUrl);
-        int[] sizes = {bigSize, smallSize, smallSize};
-        for(int i = 0; i != mImageList.size(); ++i) {
-                Picasso.with(getContext())
-                        .load(mImageList.get(i).getTag().toString())
-                        .resize(sizes[i], sizes[i])
-                        .centerInside()
-                        .into(mImageList.get(i));
-        }
+        mImageList.get(0).SetFromInstagramData(images.getBigImage(), bigSizeWidth, bigSizeHeight);
+        mImageList.get(1).SetFromInstagramData(images.getFirstSmallImage(), smallSizeWidth, smallSizeHeight);
+        mImageList.get(2).SetFromInstagramData(images.getSecondSmallImage(), smallSizeWidth, smallSizeHeight);
     }
 }

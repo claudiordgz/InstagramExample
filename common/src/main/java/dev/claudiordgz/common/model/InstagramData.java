@@ -1,4 +1,4 @@
-package dev.claudiordgz.hashtasearch.model;
+package dev.claudiordgz.common.model;
 
 
 /**

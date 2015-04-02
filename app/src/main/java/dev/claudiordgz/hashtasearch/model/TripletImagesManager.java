@@ -2,6 +2,8 @@ package dev.claudiordgz.hashtasearch.model;
 
 import java.util.ArrayList;
 
+import dev.claudiordgz.common.model.InstagramData;
+
 /**
  * Created by Claudio on 3/30/2015.
  */

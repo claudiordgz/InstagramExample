@@ -15,8 +15,8 @@ import com.squareup.okhttp.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import dev.claudiordgz.common.model.InstagramData;
 import dev.claudiordgz.hashtasearch.R;
-import dev.claudiordgz.hashtasearch.model.InstagramData;
 
 
 /**

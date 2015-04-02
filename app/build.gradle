@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "dev.claudiordgz.instragramexample"
-        minSdkVersion 14
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -34,7 +34,9 @@ configurations {
 
 
 dependencies {
+    compile project(':common')
     compile project(':sliderlib')
+    compile project(':adaptablecard')
     compile 'com.android.support:support-v4:22.0.0'
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.squareup.okhttp:okhttp:2.3.0'

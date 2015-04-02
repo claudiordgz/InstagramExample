@@ -17,8 +17,8 @@ import java.util.LinkedHashSet;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import dev.claudiordgz.common.model.InstagramData;
 import dev.claudiordgz.hashtasearch.R;
-import dev.claudiordgz.hashtasearch.model.InstagramData;
 import dev.claudiordgz.hashtasearch.model.TripletImages;
 import dev.claudiordgz.hashtasearch.data_providers.BackgroundImageTask;
 import dev.claudiordgz.hashtasearch.model.TripletImagesManager;

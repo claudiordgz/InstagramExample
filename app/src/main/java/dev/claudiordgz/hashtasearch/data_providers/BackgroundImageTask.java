@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-import dev.claudiordgz.hashtasearch.model.InstagramData;
+import dev.claudiordgz.common.model.InstagramData;
 import dev.claudiordgz.hashtasearch.model.TripletImages;
 import dev.claudiordgz.hashtasearch.model.TripletImagesManager;
 import dev.claudiordgz.hashtasearch.data_providers.network.SelfiesRequest;
