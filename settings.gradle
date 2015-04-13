@@ -1,1 +1,1 @@
-include ':app', ':sliderlib', ':AutoFitTextViewLibrary', ':common', ':adaptablecard'
+include ':app', ':sliderlib', ':AutoFitTextViewLibrary', ':common', ':adaptablecard', ':testing_app'
