@@ -3,11 +3,11 @@
 
     <declare-styleable name="TraineeHeader">
         <attr name="trainee_avatar" format="integer" />
-        <attr name="trainee_avatar_width" format="dimension"/>
+        <attr name="trainee_avatar_width" format="dimension" />
         <attr name="first_name" format="string" />
         <attr name="last_name" format="string" />
         <attr name="technology" format="string" />
-        <attr name="background_header" format="color"/>
+        <attr name="background_header" format="color" />
     </declare-styleable>
 
 

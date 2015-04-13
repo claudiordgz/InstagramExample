@@ -8,69 +8,72 @@ import dev.claudiordgz.android.sliderlib.views.custom_views.SlidingTabStrip;
 
 
 public class InternalViewPagerListener implements ViewPager.OnPageChangeListener {
-    private int mScrollState;
-    private SlidingTabStrip mTabStrip;
-    private ICommand mScrollToTabAction;
-    private ViewPager.OnPageChangeListener mViewPagerPageChangeListener;
+  private int mScrollState;
+  private SlidingTabStrip mTabStrip;
+  private ICommand mScrollToTabAction;
+  private ViewPager.OnPageChangeListener mViewPagerPageChangeListener;
 
-    public void setup(SlidingTabStrip tabStrip, ICommand scrollToTab,
-                      ViewPager.OnPageChangeListener listener) {
-        setTabStrip(tabStrip);
-        setScrollToTabAction(scrollToTab);
-        setViewPagerPageChangeListener(listener);
+  public void setup(SlidingTabStrip tabStrip, ICommand scrollToTab,
+                    ViewPager.OnPageChangeListener listener) {
+    setTabStrip(tabStrip);
+    setScrollToTabAction(scrollToTab);
+    setViewPagerPageChangeListener(listener);
+  }
+
+  @SuppressWarnings("WeakerAccess")
+  public void setTabStrip(SlidingTabStrip tabStrip) {
+    mTabStrip = tabStrip;
+  }
+
+  @SuppressWarnings("WeakerAccess")
+  public void setScrollToTabAction(ICommand scrollToTab) {
+    mScrollToTabAction = scrollToTab;
+  }
+
+  @SuppressWarnings("WeakerAccess")
+  public void setViewPagerPageChangeListener(ViewPager.OnPageChangeListener listener) {
+    mViewPagerPageChangeListener = listener;
+  }
+
+  @Override
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    int tabStripChildCount = mTabStrip.getChildCount();
+    if ((tabStripChildCount == 0) || (position < 0) || (position >= tabStripChildCount)) {
+      return;
     }
 
-    public void setTabStrip(SlidingTabStrip tabStrip) {
-        mTabStrip = tabStrip;
+    mTabStrip.onViewPagerPageChanged(position, positionOffset);
+
+    View selectedTitle = mTabStrip.getChildAt(position);
+    int extraOffset = (selectedTitle != null)
+        ? (int) (positionOffset * selectedTitle.getWidth())
+        : 0;
+    mScrollToTabAction.apply(position, extraOffset);
+
+    if (mViewPagerPageChangeListener != null) {
+      mViewPagerPageChangeListener.onPageScrolled(position, positionOffset,
+          positionOffsetPixels);
+    }
+  }
+
+  @Override
+  public void onPageScrollStateChanged(int state) {
+    mScrollState = state;
+    if (mViewPagerPageChangeListener != null) {
+      mViewPagerPageChangeListener.onPageScrollStateChanged(state);
+    }
+  }
+
+  @Override
+  public void onPageSelected(int position) {
+    if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
+      mTabStrip.onViewPagerPageChanged(position, 0f);
+      mScrollToTabAction.apply(position, 0);
     }
 
-    public void setScrollToTabAction(ICommand scrollToTab) {
-        mScrollToTabAction = scrollToTab;
+    if (mViewPagerPageChangeListener != null) {
+      mViewPagerPageChangeListener.onPageSelected(position);
     }
-
-    public void setViewPagerPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        mViewPagerPageChangeListener = listener;
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        int tabStripChildCount = mTabStrip.getChildCount();
-        if ((tabStripChildCount == 0) || (position < 0) || (position >= tabStripChildCount)) {
-            return;
-        }
-
-        mTabStrip.onViewPagerPageChanged(position, positionOffset);
-
-        View selectedTitle = mTabStrip.getChildAt(position);
-        int extraOffset = (selectedTitle != null)
-                ? (int) (positionOffset * selectedTitle.getWidth())
-                : 0;
-        mScrollToTabAction.apply(position, extraOffset);
-
-        if (mViewPagerPageChangeListener != null) {
-            mViewPagerPageChangeListener.onPageScrolled(position, positionOffset,
-                    positionOffsetPixels);
-        }
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-        mScrollState = state;
-        if (mViewPagerPageChangeListener != null) {
-            mViewPagerPageChangeListener.onPageScrollStateChanged(state);
-        }
-    }
-
-    @Override
-    public void onPageSelected(int position) {
-        if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
-            mTabStrip.onViewPagerPageChanged(position, 0f);
-            mScrollToTabAction.apply(position, 0);
-        }
-
-        if (mViewPagerPageChangeListener != null) {
-            mViewPagerPageChangeListener.onPageSelected(position);
-        }
-    }
+  }
 
 }

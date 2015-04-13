@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '22.0.0'
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         minSdkVersion 16
@@ -16,17 +16,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
 
-ext {
-    robobindingVersion = 'latest.integration'
-    //robobindingVersion = '0.8.8'
+    lintOptions {
+        disable 'Typo','UnusedResources'
+    }
 }
 
 dependencies {
-    compile("org.robobinding:robobinding:${robobindingVersion}:with-aop") {
-        exclude group: 'com.google.guava'
-    }
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:support-v4:22.0.0'
 }

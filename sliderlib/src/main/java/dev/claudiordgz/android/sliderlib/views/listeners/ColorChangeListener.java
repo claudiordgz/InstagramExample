@@ -16,31 +16,31 @@ import dev.claudiordgz.android.sliderlib.views.actionbar.ActionBarColorChange;
  */
 public class ColorChangeListener {
 
-    ActionBarColorChange actionBarColorizer = new ActionBarColorChange();
-    Context mContext;
-    private ViewPager mViewPager = null;
+  private final ActionBarColorChange actionBarColorizer = new ActionBarColorChange();
+  private final Context mContext;
+  private ViewPager mViewPager = null;
 
-    public ColorChangeListener(Context context){
-        mContext = context;
+  public ColorChangeListener(Context context) {
+    mContext = context;
+  }
+
+  public void setViewPager(ViewPager viewPager) {
+    mViewPager = viewPager;
+  }
+
+  public void setActionBar(ActionBar actionBar) {
+    actionBarColorizer.setActionBar(actionBar);
+  }
+
+  public void notify(int newColor, int newBackgroundColor, int statusBarColor) {
+    actionBarColorizer.changeColor(newColor, mContext.getResources().getDrawable(R.drawable.actionbar_bottom));
+    mViewPager.setBackgroundColor(newBackgroundColor);
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Activity parent = (Activity) mContext;
+      Window window = parent.getWindow();
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(statusBarColor);
     }
-
-    public void setViewPager(ViewPager viewPager){
-        mViewPager = viewPager;
-    }
-
-    public void setActionBar(ActionBar actionBar) {
-        actionBarColorizer.setActionBar(actionBar);
-    }
-
-    public void notify(int newColor, int newBackgroundColor, int statusBarColor){
-        actionBarColorizer.changeColor(newColor, mContext.getResources().getDrawable(R.drawable.actionbar_bottom));
-        mViewPager.setBackgroundColor(newBackgroundColor);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            Activity parent = (Activity)mContext;
-            Window window = parent.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(statusBarColor);
-        }
-    }
+  }
 }
