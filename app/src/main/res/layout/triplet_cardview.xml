@@ -11,27 +11,27 @@
         android:id="@+id/bigImage"
         android:contentDescription="@string/BIG_IMAGE"
         app:card_width="400dp"
-        app:card_height="500dp"
-        />
+        app:card_height="500dp" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <dev.claudiordgz.adaptablecard.ItemCard
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/firstSmallImage"
             android:contentDescription="@string/FIRST_SMALL_IMAGE"
             app:card_width="200dp"
-            app:card_height="250dp"
-            />
+            app:card_height="250dp" />
+
         <dev.claudiordgz.adaptablecard.ItemCard
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/secondSmallImage"
             android:contentDescription="@string/SECOND_SMALL_IMAGE"
             app:card_width="200dp"
-            app:card_height="250dp"
-            />
+            app:card_height="250dp" />
     </LinearLayout>
 </LinearLayout>

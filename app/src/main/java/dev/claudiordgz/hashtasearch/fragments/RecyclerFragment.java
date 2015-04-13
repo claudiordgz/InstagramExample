@@ -30,78 +30,100 @@ import uk.co.ribot.easyadapter.EasyRecyclerAdapter;
  */
 public class RecyclerFragment extends Fragment {
 
-    public static String argHashTag = "hashTag";
+  public static final String ARG_HASHTAG = "hashTag";
+  public static final String ARG_POSITION = "position";
+  public static final String ARG_IS_TABLET = "isTablet";
 
-    @InjectView(R.id.recycler_view) RecyclerView mRecyclerView;
-    private boolean loading = true;
-    private int firstVisibleItem;
-    private LinkedHashSet<InstagramData> urlCache;
-    private TripletImagesManager mImageManager;
-    private String nextBatchId = "";
-    String hashTag;
+  @InjectView(R.id.recycler_view)
+  RecyclerView mRecyclerView;
+  private boolean loading = true;
+  private int firstVisibleItem;
+  private LinkedHashSet<InstagramData> urlCache;
+  private TripletImagesManager mImageManager;
+  private String nextBatchId = "";
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
-        final Activity activity = getActivity();
+  private String hashTag;
+  private int position;
+  private Boolean isTablet;
 
-        final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        int width = OrientationHelper.getScreenOrientationAndSize(getActivity().getBaseContext()).second.first;
-        String wid = "" + width;
-        Toast.makeText(getActivity(), wid, Toast.LENGTH_SHORT).show();
-        int recyclerWidth = width / 2;
-        if(recyclerWidth > 800){
+  public static RecyclerFragment newInstance(int position, String hashtag, Boolean isTablet) {
+    RecyclerFragment f = new RecyclerFragment();
+    Bundle b = new Bundle();
+    b.putInt(ARG_POSITION, position);
+    b.putString(ARG_HASHTAG, hashtag);
+    b.putBoolean(ARG_IS_TABLET, isTablet);
+    f.setArguments(b);
+    return f;
+  }
 
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+    final Activity activity = getActivity();
+
+    final LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+    mLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+    mRecyclerView.setLayoutManager(mLayoutManager);
+    int width = OrientationHelper.getScreenOrientationAndSize(getActivity().getBaseContext()).second.first;
+    String wid = "" + width;
+    Toast.makeText(getActivity(), wid, Toast.LENGTH_SHORT).show();
+    int recyclerWidth = width / 2;
+    if (recyclerWidth > 800) {
+
+    }
+    int margins = 0;
+    if(isTablet){
+      width = width / 2;
+      margins = width / 2;
+    }
+
+    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, LinearLayout.LayoutParams.MATCH_PARENT);
+    params.setMargins(margins, 0, margins, 0);
+    mRecyclerView.setLayoutParams(params);
+    mRecyclerView.setHasFixedSize(true);
+
+    final EasyRecyclerAdapter<TripletImages> adapter = new EasyRecyclerAdapter<>(
+        getActivity(),
+        TripletViewHolder.class);
+
+    mRecyclerView.setAdapter(adapter);
+    mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+        int visibleItemCount = mLayoutManager.getChildCount();
+        int totalItemCount = mLayoutManager.getItemCount();
+        firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
+        if (loading) {
+          if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
+            loading = false;
+          }
+        } else {
+          new BackgroundImageTask(activity.getApplicationContext(), adapter, urlCache, mImageManager, nextBatchId, hashTag).execute();
+          loading = true;
         }
+      }
+    });
+    new BackgroundImageTask(activity.getApplicationContext(), adapter, urlCache, mImageManager, nextBatchId, hashTag).execute();
+  }
 
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup parent,
+                           Bundle savedInstanceState) {
+    View v = inflater.inflate(R.layout.fragment_main, parent, false);
+    ButterKnife.inject(this, v);
+    Bundle args = this.getArguments();
+    hashTag = args.getString(ARG_HASHTAG);
+    position = args.getInt(ARG_POSITION);
+    isTablet = args.getBoolean(ARG_IS_TABLET);
+    urlCache = new LinkedHashSet<>();
+    mImageManager = new TripletImagesManager();
+    return v;
+  }
 
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width / 2,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(width / 4,0,width / 4,0);
-        mRecyclerView.setLayoutParams(params);
-        mRecyclerView.setHasFixedSize(true);
-
-        final EasyRecyclerAdapter<TripletImages> adapter = new EasyRecyclerAdapter<>(
-                getActivity(),
-                TripletViewHolder.class);
-
-        mRecyclerView.setAdapter(adapter);
-        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int visibleItemCount = mLayoutManager.getChildCount();
-                int totalItemCount = mLayoutManager.getItemCount();
-                firstVisibleItem = mLayoutManager.findFirstVisibleItemPosition();
-                if (loading) {
-                    if ((visibleItemCount + firstVisibleItem) >= totalItemCount) {
-                        loading = false;
-                    }
-                } else {
-                    new BackgroundImageTask(activity.getApplicationContext(), adapter, urlCache, mImageManager, nextBatchId, hashTag).execute();
-                    loading = true;
-                }
-            }
-        });
-        new BackgroundImageTask(activity.getApplicationContext(), adapter, urlCache, mImageManager, nextBatchId, hashTag).execute();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup parent,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_main, parent, false);
-        ButterKnife.inject(this, v);
-        hashTag = this.getArguments().getString(argHashTag);
-        urlCache = new LinkedHashSet<>();
-        mImageManager = new TripletImagesManager();
-        return v;
-    }
-
-    @Override public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.reset(this);
-    }
+  @Override
+  public void onDestroyView() {
+    super.onDestroyView();
+    ButterKnife.reset(this);
+  }
 }

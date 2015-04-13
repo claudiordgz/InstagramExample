@@ -5,10 +5,11 @@
     android:orientation="vertical"
     tools:context=".MainActivity"
     tools:ignore="MergeRootFrame">
+
     <include layout="@layout/toolbar" />
+
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 </LinearLayout>

@@ -25,46 +25,46 @@ import dev.claudiordgz.hashtasearch.model.InstagramData;
 @RunWith(StyleChangerRobolectricTestRunner.class)
 public class SelfiesRequestTest {
 
-    private String TAG = getClass().getName();
+  private String TAG = getClass().getName();
 
-    @Before
-    public void setUp() throws Exception {
-        ShadowLog.stream = System.out;
+  @Before
+  public void setUp() throws Exception {
+    ShadowLog.stream = System.out;
 
+  }
+
+  @Test
+  public void testGetImagesDuplicates() {
+    doATest(200);
+  }
+
+  @Test
+  public void testGetImagesMassive() {
+    doATest(20000);
+  }
+
+  public void doATest(int n) {
+    SelfiesRequest request = new SelfiesRequest(Robolectric.application.getBaseContext());
+    Pair<String, ArrayList<InstagramData>> results = request.GetImages(null, null);
+    Pair<String, ArrayList<InstagramData>> results_next = request.GetImages(null, results.first);
+    ArrayList<InstagramData> simple_result_list = results_next.second;
+    String next = results_next.first;
+    for (int i = 0; i != n; ++i) {
+      results = request.GetImages(null, next);
+      next = results.first;
+      if (next == null) {
+        break;
+      }
+      simple_result_list.addAll(results.second);
     }
+    Set<InstagramData> has_duplicates = new HashSet<>(simple_result_list);
+    Assert.assertTrue(has_duplicates.size() == simple_result_list.size());
+  }
 
-    @Test
-    public void testGetImagesDuplicates(){
-        doATest(200);
-    }
-
-    @Test
-    public void testGetImagesMassive(){
-        doATest(20000);
-    }
-
-    public void doATest(int n) {
-        SelfiesRequest request = new SelfiesRequest(Robolectric.application.getBaseContext());
-        Pair<String, ArrayList<InstagramData>> results = request.GetImages(null, null);
-        Pair<String, ArrayList<InstagramData>> results_next = request.GetImages(null, results.first);
-        ArrayList<InstagramData> simple_result_list = results_next.second;
-        String next = results_next.first;
-        for(int i = 0; i != n; ++i) {
-            results = request.GetImages(null, next);
-            next = results.first;
-            if(next == null){
-                break;
-            }
-            simple_result_list.addAll(results.second);
-        }
-        Set<InstagramData> has_duplicates = new HashSet<>(simple_result_list);
-        Assert.assertTrue(has_duplicates.size() == simple_result_list.size());
-    }
-
-    @Test
-    public void testGetImages() {
-        doATest(5);
-    }
+  @Test
+  public void testGetImages() {
+    doATest(5);
+  }
 
 
 }

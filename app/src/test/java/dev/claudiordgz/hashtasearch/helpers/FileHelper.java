@@ -9,18 +9,17 @@ import java.io.RandomAccessFile;
  */
 public class FileHelper {
 
-    public static String readFile(String path)
-            throws IOException
-    {
-        String retVal = null;
-        try {
-            RandomAccessFile file = new RandomAccessFile(path, "r");
-            byte[] bytes = new byte[(int)file.length()];
-            file.read(bytes);
-            retVal = new String(bytes);
-        } catch (Exception e){
-            throw e;
-        }
-        return retVal;
+  public static String readFile(String path)
+      throws IOException {
+    String retVal = null;
+    try {
+      RandomAccessFile file = new RandomAccessFile(path, "r");
+      byte[] bytes = new byte[(int) file.length()];
+      file.read(bytes);
+      retVal = new String(bytes);
+    } catch (Exception e) {
+      throw e;
     }
+    return retVal;
+  }
 }
